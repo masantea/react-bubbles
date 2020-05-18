@@ -7,7 +7,7 @@ const AxiosWithAuth = () => {
         .create(
 
             { headers:{ 
- 
+
                 authorization: localStorage.getItem('token') 
                 
             }
