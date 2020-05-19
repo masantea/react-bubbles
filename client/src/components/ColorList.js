@@ -1,4 +1,5 @@
 import React, { useState, useParams } from "react";
+import { useHistory } from 'react-router-dom';
 import AxiosWithAuth from "./AxiosWithAuth";
 
 
@@ -11,33 +12,29 @@ const ColorList = ({ colors, updateColors }) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+  const history = useHistory();
 
   const editColor = color => {
     setEditing(true);
     setColorToEdit(color);
   };
 
-  // componentDidMount(){
-  //   const id = props.match.params.id
-  //   axios.get(`http://localhost:5000/api/colors/${id}`)
-  //   .then(res => setColorToEdit (res.data))
-  //   .catch(err => console.log(err))
-  //   }
-  
- 
-
   const saveEdit = e => {
-    e.preventDefault();
-
-    // const { id } = useParams()
-
-    // axios
-    //   .put(`http://localhost:5000/api/colors/${id}`)
-    //   .then(res => setColorToEdit (res.data))
-    //   .catch(err => console.log(err))
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
+
+    e.preventDefault();
+
+    AxiosWithAuth()
+      .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
+      .then(res => {
+        // res.data is color list with updated fields
+        history.push('/');
+        history.push('/protected');
+
+      })
+      .catch(err => console.log(err))
   };
 
   const deleteColor = color => {
@@ -48,6 +45,10 @@ const ColorList = ({ colors, updateColors }) => {
           .then(res => {
             // res.data is just the id
             console.log(res.data);
+            history.push('/');
+            history.push('/protected');
+
+
           })
           .catch(err => console.warn(err));
   };

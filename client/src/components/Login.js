@@ -1,10 +1,12 @@
 import React, {useState} from "react";
+import { useHistory } from 'react-router-dom';
 import axios from "axios"
 
 const Login = (props) => {
 
   const [username, setUsername] = useState('') 
   const [password, setPassword]= useState('')
+  const history = useHistory();
 
   //console.log()
 
@@ -13,10 +15,12 @@ const Login = (props) => {
     //Make a POST request and send the credentials object to the api
     axios
       .post('http://localhost:5000/api/login', {username, password} )
-      .then(res => (localStorage.setItem('token', res.data.payload), console.log(res))) //first consolelog res, 
+      .then(res => {
+        localStorage.setItem('token', res.data.payload);
+        console.log(res); //first consolelog res, 
+        history.push('/protected');
+      })
       .catch(err => console.log(err.message))
-
-      //props.history.push('/protected')
   
   };
   // make a post request to retrieve a token from the api
